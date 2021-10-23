@@ -1,0 +1,1 @@
+export const methodsWithBearer = ['auth/me','jobs'] ;
