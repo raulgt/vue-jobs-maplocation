@@ -2,8 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Nopagefound  from '../views/shared-views/Nopagefound.vue';
 import Home from '../views/Home.vue';
+import Template from '../views/template/template.vue'; 
 import Login from '../views/Login.vue';
-
 import { navigationGuard } from '../shared/navigation.guard';
 
 Vue.use(VueRouter)
@@ -12,19 +12,27 @@ const routes = [
   
   {
     path: '/',
-    redirect: '/login',    
+    redirect: '/init/login',    
   },
   {
-    path: '/login',
+    path: '/init/login',
     name: 'login',    
     component: Login,
     beforeEnter: navigationGuard.guardMainRoute
   },
   {
-    path: '/home',
-    name: 'home',   
-    component: Home,
-    beforeEnter: navigationGuard.guardMainRoute
+    path: '/dashboard',   
+    name: 'dashboard',
+    component: Template,
+    beforeEnter: navigationGuard.guardMainRoute,
+    children: [
+      {
+        title: 'home',
+        path: '/',
+        name: 'home',   
+        component: Home,        
+      }
+    ]  
   },
   {
     path: '*',
@@ -44,7 +52,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 
 export default router

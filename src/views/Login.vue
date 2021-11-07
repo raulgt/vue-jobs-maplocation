@@ -74,6 +74,14 @@ export default {
         expires_in: 0,
         token_type: "",
       },
+      userDetail:{
+        id: 0,
+        name: '',
+        email: '',
+        email_verified_at: '',
+        created_at: '',
+        updated_at: '',
+      },
     };
   },  
   validations: {
@@ -93,12 +101,23 @@ export default {
             email: this.email,
             password: this.password,
           };
-          this.credentials = await loginService.loginUser(credential);        
+          this.credentials = await loginService.loginUser(credential);    
+           
           if (Object.keys(this.credentials).length !== 0) {
-            this.$router.push({ name: 'home' });
+             this.userDetails = await loginService.getUserDetail();
+            if(Object.keys(this.userDetails).length !== 0){
+                this.$router.push('/dashboard');
+            }            
+          }else{
+            this.wrongLogin();
           }        
       }
     },
+    wrongLogin(){
+      this.email = '';
+      this.password = '';
+      this.$toastr.e("UNAUTHORIZED");
+    }
   },
 };
 </script>

@@ -1,46 +1,68 @@
 <template>
-  <div>
-    <NavBar />
-    <div>
-      <p>HOLA {{ userDetail.name }}</p>
+  <div class="card-group">
+    <div class="card m-l-5 m-t-5">
+      <div class="card-body">
+        <LocationMap   
+        :apiKey = "googleKey"
+        :mapConfig = "mapConf"
+        :taskRow = "currentTaskRow"  
+        :tableTasks = "currentTasks" 
+        @markerClick = "clickOnMarker"     
+        />
+      </div>
     </div>
-    <Footer />
+    <div class="card m-r-5 m-l-5 m-t-5">
+      <div class="card-body">
+        <TaskTable  
+        @clickedRow = "selectRowMarker"  
+        @tasksArray = "tasksLocal"
+        :markerId = "markerClickedId"
+        />       
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Footer from "../common-components/footer.vue";
-import NavBar from "../common-components/navbar.vue";
-import { loginService } from "../shared/login.service";
+
+
+import LocationMap from '../components/location-map.vue';
+import TaskTable from '../components/task-table.vue';
+import { googleMapKey } from '../assets/api-keys/google-map';
+import { defaultMapLocation } from '../configurations/constants';
 
 export default {
-  name: "Home",
+  name: "Home",  
   components: {
-    NavBar,
-    Footer,
-  },
-  async created () {
-    await this.getUserDetails();
+    LocationMap,
+    TaskTable,
   },
   data() {
-    return {
-      userDetail: {
-        id: 0,
-        name: '',
-        email: '',
-        email_verified_at: '',
-        created_at: '',
-        updated_at: '',
-      },
+    return {  
+      // entries for LocationMap
+      currentTaskRow: 0,   
+      currentTasks:[],   
+      googleKey: googleMapKey,
+      mapConf: {
+         center: defaultMapLocation,
+         zoom: 7
+      }, 
+         // entry for taskTable
+      markerClickedId:0,
     };
   },
   methods: {
-    async getUserDetails() {
-      this.userDetail = await loginService.getUserDetail();
-      if (Object.keys(this.userDetail).length !== 0) {
-         console.log('userDetail: ', this.userDetail);
-      }
+    selectRowMarker(id) {       
+      this.currentTaskRow = id;               
     },
+    tasksLocal(tasks){      
+      this.currentTasks = tasks;         
+    },
+    clickOnMarker(id){
+      this.markerClickedId = id;
+    }
+
   },
+
 };
 </script>

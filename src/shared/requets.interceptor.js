@@ -2,13 +2,15 @@ import * as axios from 'axios';
 import { loginService } from "../shared/login.service";
 import { methodsWithBearer } from '../configurations/constants';
 
- const token = loginService.getToken();
+ 
 
  const globalInterceptor = axios.interceptors.request.use(function (config) {
     // Do something before request is sent  
-    if(includeBearerAuthetication(config)) {
+    if(includeBearerAuthetication(config)) {     
+        const token = loginService.getToken();
         config.headers.Authorization = `Bearer ${token}`;
-    }    
+    }   
+
     return config;
   }, function (error) {
     // Do something with request error

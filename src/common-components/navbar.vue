@@ -2,12 +2,10 @@
   <div>
     <nav class="navbar navbar-expand-lg bd-navbar navbar-light">
       <div class="container-fluid">
-        <a class="navbar-brand">{{ user }}</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <button class="btn btn-bd-download ms-auto" type="button" @click="askToLogout()">
+        <a class="navbar-brand">{{ currentUser }}</a>
+          <button class="btn btn-bd-download" type="button" @click="askToLogout()">
             <span class="button-text">Logout</span>
           </button>
-        </div>
       </div>
     </nav>
     <Modal      
@@ -27,11 +25,16 @@ import { loginService } from "../shared/login.service";
 export default {
   name: "NavBar",
   data() {
-    return {
-      user: "",
+    return {    
       modalMessage: "Please, confirm the logout..!!",
       showModal: false,
     };
+  },
+  props: {
+    currentUser: {
+      type: String,
+      default: ''
+    },
   },
   components: {
     Modal,
@@ -60,7 +63,7 @@ export default {
 .btn-bd-download {
   font-weight: 500;
   color: #ffe484;
-  border-color: #ffe484;
+  border-color: #ffe484;  
 }
 
 button.btn-bd-download:hover {
@@ -70,4 +73,9 @@ button.btn-bd-download:hover {
 button.btn-bd-download:hover span {
   color: black;
 }
+
+a.navbar-brand{
+  color:whitesmoke;
+}
+
 </style>

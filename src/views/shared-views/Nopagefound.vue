@@ -11,7 +11,8 @@
                     Sorry, an error has occured, Requested page not found!
                 </div>
                 <div class="error-actions">
-                    <a href="#" class="btn btn-primary btn-lg">About <router-link to="/about"></router-link></a>
+                  <h5>Ask to: </h5>
+                    <a href="https://github.com/raulgt" target="_blank" class="btn btn-primary btn-lg">Carlos Abreu</a>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ const loginUser = async function(credetials) {
   try {
     const response = await axios.post(`${BASE_API}/auth/login`, credetials);
     let parseResponse = parseItem(response);
-    saveLoginToken(parseResponse.data.access_token);
+    await saveLoginToken(parseResponse.data.access_token);
     return parseResponse.data;
   } catch (error) {
     console.error(error);
@@ -18,17 +18,23 @@ const loginUser = async function(credetials) {
 
 const getUserDetail = async function() {
   try {
-    const response = await axios.get(`${BASE_API}/auth/me`);
-    let parseResponse = parseItem(response);
+    const response = await axios.get(`${BASE_API}/auth/me`);     
+    let parseResponse = parseItem(response);    
+    await saveLocalStorageUserDetails(parseResponse.data);
     return parseResponse.data;
   } catch (error) {
     return {};
   }
 };
 
+const getLocalStorageUserDetail = async function () {
+  return localStorageService.getLsItem("userDetails");
+}
+
 const logOutUser = () => {
   localStorageService.removeLsItem('token');  
-  router.push('/login'); 
+  localStorageService.removeLsItem('userDetails');  
+  router.push('/init/login'); 
 }
 
 const isTokenValid = () => {  
@@ -44,9 +50,13 @@ const isTokenExpired = (token) => {
  return (Math.floor((new Date).getTime() / 1000)) >= expiry;
 }
 
-const saveLoginToken = (token) => {
+const saveLoginToken = async (token) => { 
   localStorageService.setLsItem("token", token);
 };
+
+const saveLocalStorageUserDetails = async (userData) => {
+  localStorageService.setLsItem("userDetails", userData);
+}
 
 const getToken = () => {
   return localStorageService.getLsItem("token");
@@ -64,5 +74,6 @@ export const loginService = {
   logOutUser,
   getToken,
   getUserDetail,
+  getLocalStorageUserDetail,
   isTokenValid
 };
